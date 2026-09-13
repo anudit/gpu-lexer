@@ -96,7 +96,7 @@ test("real Shiki spans directly label runtime parts, comments, strings, interpol
       return alignTreeLabels(spans, [from, from + value.length])[0];
     };
     assert.equal(word("note").class, "comment");
-    assert.equal(word("div").class, "type");
+    assert.equal(word("div").class, "keyword");
     assert.ok(word("div").auxiliary & 8);
     assert.equal(word("hello").class, "string");
     assert.equal(word("const").class, "keyword");

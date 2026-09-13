@@ -41,7 +41,7 @@ test("representative teachers preserve selected semantic spans across Batch Shad
     shaderlab: [["Shader", "keyword"], ["Custom/Example", "string"], ["embedded comment", "comment"], ["return", "keyword"], ["2.0", "number"]],
     make: [["representative comment", "comment"], ["all", "function"], ["$(CC)", "string"]],
     markdown: [["Representative heading", "keyword"], ["const", "keyword", 16], ["42", "number", 16], ["print", "function", 16], ["world", "string", 16]],
-    html: [["div", "type", 8], ["const", "keyword", 16], ["call", "function", 16], ["42", "number", 16], ["color", "type", 64]],
+    html: [["div", "keyword", 8], ["const", "keyword", 16], ["call", "function", 16], ["42", "number", 16], ["color", "type", 64]],
   };
   try {
     for (const entry of entries) {

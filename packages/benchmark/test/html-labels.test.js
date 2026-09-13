@@ -75,6 +75,24 @@ test("symbols and markup containers follow the shared Shiki taxonomy", () => {
   )[0].class, "constant");
 });
 
+test("generic punctuation follows the shared operator taxonomy", () => {
+  assert.equal(labelsFromHighlightedHtml(
+    ",", '<span class="token punctuation">,</span>', "prism.js",
+  )[0].class, "operator");
+  assert.equal(labelsFromHighlightedHtml(
+    ";", '<span class="hljs-punctuation">;</span>', "highlight.js",
+  )[0].class, "operator");
+  assert.equal(labelsFromHighlightedHtml(
+    "[", '<span class="sh__token--sign">[</span>', "sugar-high",
+  )[0].class, "operator");
+});
+
+test("Prism string properties follow the shared string taxonomy", () => {
+  assert.equal(labelsFromHighlightedHtml(
+    '"my-key"', '<span class="token string-property">&quot;my-key&quot;</span>', "prism.js",
+  )[0].class, "string");
+});
+
 test("Starry Night PrettyLights classes collapse to the shared taxonomy", () => {
   const source = 'const answer = "yes" + 42 // ok';
   const html = '<span class="pl-k">const</span> answer <span class="pl-kos">=</span> ' +
@@ -83,6 +101,15 @@ test("Starry Night PrettyLights classes collapse to the shared taxonomy", () => 
   assert.deepEqual(labelsFromHighlightedHtml(source, html, "starry-night")
     .map(({ class: name }) => name),
   ["keyword", "plain", "operator", "plain", "string", "plain", "operator", "plain", "number", "plain", "comment"]);
+});
+
+test("Starry Night keyword classes are disambiguated by token text", () => {
+  const source = "if ... else ->";
+  const html = '<span class="pl-k">if</span> <span class="pl-k">...</span> ' +
+    '<span class="pl-kos">else</span> <span class="pl-kos">-&gt;</span>';
+  assert.deepEqual(labelsFromHighlightedHtml(source, html, "starry-night")
+    .map(({ class: name }) => name),
+  ["keyword", "plain", "operator", "plain", "keyword", "plain", "operator"]);
 });
 
 test("source divergence is rejected", () => {

@@ -41,10 +41,12 @@ const rules = [
   ["string", /^(?:string|constant\.other\.symbol|constant\.regexp|markup\.inline\.raw|markup\.underline\.link)\./],
   ["number", /^constant\.numeric\./],
   ["operator", /^keyword\.operator(?:\.|$)/],
-  ["keyword", /^(?:keyword(?!\.operator(?:\.|$))|storage|modifier|control|markup\.heading)(?:\.|$)/],
-  ["type", /^(?:entity\.name\.(?:type|class|interface|struct|enum|tag)|support\.(?:type|class))\./],
+  ["keyword", /^(?:keyword(?!\.operator(?:\.|$))|storage|modifier|control|markup\.heading|entity\.name\.tag)(?:\.|$)/],
+  ["type", /^(?:entity\.name\.(?:type|class|interface|struct|enum)|support\.(?:type|class))\./],
   ["function", /^(?:entity\.name\.(?:function|method)|support\.function)\./],
   ["constant", /^(?:constant\.(?:language|other)|support\.constant)(?:\.|$)/],
+  // Generic punctuation not already claimed by an outer scope is operator-like.
+  ["operator", /^punctuation(?:\.|$)/],
 ];
 
 /** Collapse nested TextMate scopes into gpu-lexer's display taxonomy. */
