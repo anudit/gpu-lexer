@@ -14,7 +14,10 @@ test("common TextMate scopes collapse to the small taxonomy", () => {
   assert.equal(classFromScopes(["keyword.operator.assignment.js"]), "operator");
   assert.equal(classFromScopes(["variable.other.constant.js"]), "plain");
   assert.equal(classFromScopes(["constant.numeric.decimal.js"]), "number");
-  assert.equal(classFromScopes(["entity.name.tag.html"]), "type");
+  assert.equal(classFromScopes(["entity.name.tag.html"]), "keyword");
+  assert.equal(classFromScopes(["punctuation.separator.comma.js"]), "operator");
+  assert.equal(classFromScopes(["punctuation.lacelike.brace.js"]), "operator");
+  assert.equal(classFromScopes(["punctuation.terminator.statement.js"]), "operator");
   assert.equal(classFromScopes(["markup.heading.markdown"]), "keyword");
   assert.equal(classFromScopes(["markup.inline.raw.string.markdown"]), "string");
   assert.equal(classFromScopes(["support.constant.property-value.css"]), "constant");

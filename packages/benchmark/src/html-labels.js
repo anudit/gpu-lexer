@@ -1,4 +1,4 @@
-const OPERATOR = /^[+*/%=!&|^~?:<>-]+$/;
+const SYMBOLIC_OPERATOR = /^[^\p{L}\p{N}_\s]+$/u;
 
 export function labelsFromHighlightedHtml(source, html, engine, { family = "" } = {}) {
   const labels = [];
@@ -55,8 +55,11 @@ function classifyFrame(engine, classes, value, family) {
     if (["pl-s", "pl-pds", "pl-sr", "pl-cce", "pl-sre", "pl-sra", "pl-corl"]
       .some((name) => names.has(name))) return "string";
     if (names.has("pl-c1")) return /^[-+]?(?:\d|\.\d)/.test(value) ? "number" : "constant";
-    if (names.has("pl-kos")) return OPERATOR.test(value) ? "operator" : "keyword";
-    if (names.has("pl-k") || names.has("pl-mh") || names.has("pl-ms")) return "keyword";
+    // Primer uses both classes for keyword and keyword.operator scopes.
+    if (names.has("pl-kos") || names.has("pl-k")) {
+      return SYMBOLIC_OPERATOR.test(value) ? "operator" : "keyword";
+    }
+    if (names.has("pl-mh") || names.has("pl-ms")) return "keyword";
     if (names.has("pl-ent")) return "type";
     if (names.has("pl-e") || names.has("pl-en")) return "function";
     if (names.has("pl-pse")) return "operator";
@@ -75,7 +78,7 @@ function classifyFrame(engine, classes, value, family) {
     }
     if (type === "entity") return "type";
     if (type === "property") return family === "css" ? "type" : "plain";
-    if (type === "sign") return OPERATOR.test(value) ? "operator" : "plain";
+    if (type === "sign") return "operator";
     return "plain";
   }
 
@@ -95,13 +98,14 @@ function classifyFrame(engine, classes, value, family) {
     if (names.has("literal")) return "constant";
     if (names.has("operator")) return "operator";
     if (names.has("keyword") || names.has("meta-keyword") || names.has("section")) return "keyword";
+    if (names.has("punctuation")) return "operator";
     if (["subst", "template-variable", "params", "attr", "attribute", "variable",
-      "property", "punctuation", "tag", "quote"].some((name) => names.has(name))) return "plain";
+      "property", "tag", "quote"].some((name) => names.has(name))) return "plain";
     return undefined;
   }
 
   if (names.has("comment")) return "comment";
-  if (["string", "char", "regex", "attr-value", "template-string", "cdata", "symbol", "url"]
+  if (["string", "string-property", "char", "regex", "attr-value", "template-string", "cdata", "symbol", "url"]
     .some((name) => names.has(name))) return "string";
   if (names.has("number")) return "number";
   if (names.has("class-name") || names.has("builtin") || names.has("doctype-tag")) return "type";
@@ -113,7 +117,8 @@ function classifyFrame(engine, classes, value, family) {
   if (["keyword", "control-flow", "directive", "macro", "important", "atrule", "rule"]
     .some((name) => names.has(name))) return "keyword";
   if (names.has("tag")) return "type";
-  if (["interpolation", "punctuation", "attr-name", "parameter", "property", "variable",
+  if (names.has("punctuation")) return "operator";
+  if (["interpolation", "attr-name", "parameter", "property", "variable",
     "namespace", "plain-text", "prolog", "name", "blockquote", "entity"]
     .some((name) => names.has(name))) return "plain";
   return undefined;
